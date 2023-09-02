@@ -1,0 +1,21 @@
+server:
+  port: ${PORT:8080}
+
+logging:
+  level:
+    root: INFO
+
+spring:
+  # Настраиваем подключение к базе данных
+  datasource:
+    url: ${JDBC_DATABASE_URL}
+    username: ${JDBC_DATABASE_USERNAME}
+    password: ${JDBC_DATABASE_PASSWORD}
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+
+  # Настраиваем инструмент Liquibase
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yml # Указываем путь к основному файлу миграции
