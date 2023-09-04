@@ -1,16 +1,9 @@
-server:
-  port: ${PORT:8080}
-
-logging:
-  level:
-    root: INFO
-
 spring:
   # Настраиваем подключение к базе данных
   datasource:
     url: jdbc:h2:./taskManagerDB
-    username:
-    password:
+    username: ""
+    password: ""
   jpa:
     show-sql: true
     hibernate:
@@ -18,7 +11,7 @@ spring:
 
   # Настраиваем инструмент Liquibase
   liquibase:
-    change-log: classpath:db/changelog/db.changelog-master.yml # Указываем путь к основному файлу миграции
+    change-log: classpath:db/changelog/db.changelog-master.yaml # Указываем путь к основному файлу миграции
 
   # Настраиваем консоль Н2. Это позволит нам открыть её в браузере по указанному пути
   h2:

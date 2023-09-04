@@ -1,10 +1,3 @@
-server:
-  port: ${PORT:8080}
-
-logging:
-  level:
-    root: INFO
-
 spring:
   # Настраиваем подключение к базе данных
   datasource:
@@ -18,4 +11,4 @@ spring:
 
   # Настраиваем инструмент Liquibase
   liquibase:
-    change-log: classpath:db/changelog/db.changelog-master.yml # Указываем путь к основному файлу миграции
+    change-log: classpath:db/changelog/db.changelog-master.yaml # Указываем путь к основному файлу миграции
