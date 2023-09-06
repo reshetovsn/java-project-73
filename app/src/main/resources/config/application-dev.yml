@@ -1,3 +1,7 @@
+server:
+  error:
+    include-stacktrace: never
+
 spring:
   # Настраиваем подключение к базе данных
   datasource:
