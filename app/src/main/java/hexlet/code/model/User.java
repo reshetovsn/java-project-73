@@ -1,16 +1,16 @@
 package hexlet.code.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Column;
-import jakarta.persistence.GenerationType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import static jakarta.persistence.TemporalType.TIMESTAMP;
 
 import java.util.Date;
 
@@ -25,15 +25,22 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotBlank
     private String firstName;
 
+    @NotBlank
     private String lastName;
 
     @Column(unique = true)
+    @Email
     private String email;
 
+    @NotBlank
+    @Size(min = 3, max = 100)
+    @JsonIgnore // Чтобы jackson игнорировал поле при сериализации объекта пользователя в JSON строку
     private String password;
 
     @CreationTimestamp
+    @Temporal(TIMESTAMP)
     private Date createdAt;
 }
