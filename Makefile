@@ -1,34 +1,40 @@
-.DEFAULT_GOAL := run-dist
-
-run-dist: 
-	make -C app run-dist
+setup:
+	gradle wrapper --gradle-version 8.2.1
 
 clean:
-	make -C app clean
+	./gradlew clean
 
 build:
-	make -C app build
+	./gradlew clean build
+
+start:
+	./gradlew bootRun --args='--spring.profiles.active=dev'
 
 install:
-	make -C app install
+	./gradlew install
 
-run-dist:
-	make -C run-dist
+start-prod:
+	./gradlew bootRun --args='--spring.profiles.active=prod'
 
-run:
-	make -C app run
-
-test:
-	make -C app test
-
-report:
-	make -C app report
+generate-migrations:
+	./gradlew generateMigrations
 
 lint:
-	make -C app lint
+	./gradlew checkstyleMain checkstyleTest
 
-update-deps:
-	make -C app update-deps
+test:
+	./gradlew test
+
+report:
+	./gradlew jacocoTestReport
+
+check-updates:
+	./gradlew dependencyUpdates
+
+image-build:
+	docker build -t hexletcomponents/app:latest .
+
+image-push:
+	docker push hexletcomponents/app:latest
 
 .PHONY: build
-
