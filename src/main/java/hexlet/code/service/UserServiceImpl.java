@@ -9,6 +9,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 @AllArgsConstructor
@@ -18,6 +20,11 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     @Autowired
     private final PasswordEncoder passwordEncoder;
+
+    @Override
+    public List<User> getAll() {
+        return userRepository.findAll();
+    }
 
     @Override
     public User getUserById(long id) {
@@ -42,5 +49,10 @@ public class UserServiceImpl implements UserService {
         userToUpdate.setLastName(userDto.getLastName());
         userToUpdate.setPassword(passwordEncoder.encode(userDto.getPassword()));
         return userRepository.save(userToUpdate);
+    }
+
+    @Override
+    public void deleteUser(long id) {
+        userRepository.delete(getUserById(id));
     }
 }

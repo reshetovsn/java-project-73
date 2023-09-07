@@ -2,8 +2,8 @@ package hexlet.code.controllers;
 
 import hexlet.code.dto.UserDto;
 import hexlet.code.model.User;
-import hexlet.code.repository.UserRepository;
 import hexlet.code.service.UserService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,11 +25,10 @@ public class UserController {
     public static final String USER_CONTROLLER_PATH = "/users";
     public static final String ID = "/{id}";
     private final UserService userService;
-    private final UserRepository userRepository;
 
     @GetMapping()
     public List<User> getAll() {
-        return userRepository.findAll();
+        return userService.getAll();
     }
 
     @GetMapping(ID)
@@ -38,17 +37,17 @@ public class UserController {
     }
 
     @PostMapping()
-    public User createUser(@RequestBody UserDto userDto) {
+    public User createUser(@RequestBody @Valid UserDto userDto) {
         return userService.createNewUser(userDto);
     }
 
     @PatchMapping(ID)
-    public User updateUser(@RequestBody UserDto userDto, @PathVariable long id) {
+    public User updateUser(@RequestBody @Valid UserDto userDto, @PathVariable long id) {
         return userService.updateUser(userDto, id);
     }
 
     @DeleteMapping(ID)
     public void deleteUser(@PathVariable long id) {
-        userRepository.delete(getUserById(id));
+        userService.deleteUser(id);
     }
 }
