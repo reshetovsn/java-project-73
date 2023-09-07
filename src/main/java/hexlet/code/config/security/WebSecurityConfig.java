@@ -23,8 +23,6 @@ public class WebSecurityConfig {
     @Autowired
     final UserDetailsServiceImpl userDetailsServiceImpl;
 
-    private final RequestMatcher publicUrls;
-
     // Указываем, что для сравнения хешей паролей будет использоваться кодировщик BCrypt
     @Bean
     public PasswordEncoder passwordEncoder() {
