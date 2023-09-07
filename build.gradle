@@ -118,3 +118,10 @@ liquibase {
 		}
 	}
 }
+
+checkstyleMain.source = "src/main/java"
+
+checkstyleMain.exclude (
+		'**/hexlet/code/AppApplication**',
+		'**/hexlet/code/ServletInitializer**'
+)
