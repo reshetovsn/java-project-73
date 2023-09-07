@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 
 
 @Configuration
@@ -21,7 +20,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 public class WebSecurityConfig {
 
     @Autowired
-    final UserDetailsServiceImpl userDetailsServiceImpl;
+    private final UserDetailsServiceImpl userDetailsServiceImpl;
 
     // Указываем, что для сравнения хешей паролей будет использоваться кодировщик BCrypt
     @Bean
@@ -41,9 +40,8 @@ public class WebSecurityConfig {
         // BEGIN
         http
                 .authorizeHttpRequests((request) -> request
-                        .requestMatchers("/**").permitAll()
-                        .anyRequest().permitAll()
-                );
+                .requestMatchers("/**").permitAll()
+                .anyRequest().permitAll());
         return http.build();
         // END
     }
