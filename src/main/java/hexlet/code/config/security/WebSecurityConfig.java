@@ -2,7 +2,6 @@ package hexlet.code.config.security;
 
 import hexlet.code.service.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,8 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
-    @Autowired
-    private final UserDetailsServiceImpl userDetailsServiceImpl;
+    private final UserDetailsServiceImpl userService;
 
     // Указываем, что для сравнения хешей паролей будет использоваться кодировщик BCrypt
     @Bean
@@ -37,12 +35,10 @@ public class WebSecurityConfig {
     // Переопределяем схему аутентификации
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        // BEGIN
         http
-                .authorizeHttpRequests((request) -> request
-                .requestMatchers("/**").permitAll()
-                .anyRequest().permitAll());
+                .authorizeHttpRequests(authorize -> authorize
+//                        .requestMatchers("/**").permitAll()
+                        .anyRequest().permitAll());
         return http.build();
-        // END
     }
 }
