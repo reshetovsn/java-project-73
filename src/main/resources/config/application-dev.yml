@@ -8,10 +8,10 @@ spring:
     url: jdbc:h2:./taskManagerDB
     username: ""
     password: ""
+    driver-class-name: org.h2.Driver
+
   jpa:
     show-sql: true
-    hibernate:
-      ddl-auto: validate
 
   # Настраиваем инструмент Liquibase
   liquibase:
