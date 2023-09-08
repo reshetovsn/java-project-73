@@ -1,13 +1,6 @@
 users:
-    - first_name: John
-      last_name: Smith
-      email: john@gmail.com
-      password: John123
-    - first_name: Jack
-      last_name: Doe
-      email: jack@mail.com
-      password: Jack123
-    - first_name: Jassica
-      last_name: Simpson
-      email: jassika@yahoo.com
-      password: Jassica123
+  - id: 1
+    first_name: Alex
+    last_name: Alex
+    email: alex@gmail.com
+    password: 0987
