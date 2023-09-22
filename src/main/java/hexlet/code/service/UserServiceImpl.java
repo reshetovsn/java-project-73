@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(long id) {
-        return userRepository.findById(id).get();
+        return userRepository.findById(id).orElseThrow();
     }
 
     @Override
@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(UserDto userDto, long id) {
-        User userToUpdate = userRepository.findById(id).get();
+        User userToUpdate = userRepository.findById(id).orElseThrow();
         userToUpdate.setEmail(userDto.getEmail());
         userToUpdate.setFirstName(userDto.getFirstName());
         userToUpdate.setLastName(userDto.getLastName());
@@ -62,6 +62,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getCurrentUser() {
         String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
-        return userRepository.findByEmail(currentUserName).get();
+        return userRepository.findByEmail(currentUserName).orElseThrow();
     }
 }
