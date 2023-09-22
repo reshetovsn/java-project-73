@@ -41,8 +41,8 @@ public class UserController {
 
     // Content используется для указания содержимого ответа
     @ApiResponses(@ApiResponse(responseCode = "200", content =
-    @Content(schema = @Schema(implementation = User.class)) // Указываем тип содержимого ответа
-    ))
+        @Content(schema = @Schema(implementation = User.class)) // Указываем тип содержимого ответа
+        ))
     @GetMapping
     public List<User> getAll() {
         return userService.getAll();
