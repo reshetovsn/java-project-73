@@ -25,7 +25,7 @@ public class PersonDetailsService implements UserDetailsService {
         return userRepository.findByEmail(email)
                 .map(this::buildSpringUser)
                 .orElseThrow(() -> new UsernameNotFoundException("Not found user with 'username': " + email));
-        }
+    }
 
     private UserDetails buildSpringUser(final User user) {
         return new org.springframework.security.core.userdetails.User(
