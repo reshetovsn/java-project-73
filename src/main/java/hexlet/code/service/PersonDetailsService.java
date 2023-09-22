@@ -1,6 +1,5 @@
 package hexlet.code.service;
 
-import hexlet.code.config.security.PersonDetails;
 import hexlet.code.model.User;
 import hexlet.code.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,12 +8,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import static hexlet.code.config.security.SecurityConfig.DEFAULT_AUTHORITIES;
 
 @Service
 public class PersonDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
+
     @Autowired
     public PersonDetailsService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -22,12 +22,16 @@ public class PersonDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findByEmail(email);
-
-        if (user.isEmpty()) {
-            throw new UsernameNotFoundException("User not found");
+        return userRepository.findByEmail(email)
+                .map(this::buildSpringUser)
+                .orElseThrow(() -> new UsernameNotFoundException("Not found user with 'username': " + email));
         }
 
-        return new PersonDetails(user.get());
+    private UserDetails buildSpringUser(final User user) {
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                DEFAULT_AUTHORITIES
+        );
     }
 }
