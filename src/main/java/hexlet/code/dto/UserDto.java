@@ -12,16 +12,20 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserDto {
 
-    @NotBlank(message = "FirstName must not be empty")
-    private String firstName;
-
-    @NotBlank(message = "LastName must not be empty")
-    private String lastName;
-
+    @NotBlank
     @Email
     private String email;
 
     @NotBlank
-    @Size(min = 3, max = 100, message = "Password must be larger than three characters")
+    @Size(min = 1, message = "Имя должно быть не менее 1 символа")
+    private String firstName;
+
+    @NotBlank
+    @Size(min = 1, message = "Фамилия должна быть не менее 1 символа")
+    private String lastName;
+
+    @NotBlank
+    @Size(min = 3, max = 255, message = "Пароль должен быть от 3 до 255 символов")
     private String password;
+
 }
