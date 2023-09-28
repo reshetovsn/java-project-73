@@ -1,4 +1,4 @@
-package hexlet.code.controllers;
+package hexlet.code.controller;
 
 import hexlet.code.dto.UserDto;
 import hexlet.code.model.User;
@@ -22,13 +22,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import static hexlet.code.controllers.UserController.USER_CONTROLLER_PATH;
+import static hexlet.code.controller.UserController.USER_CONTROLLER_PATH;
 import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 @RequestMapping("${base-url}" + USER_CONTROLLER_PATH)
 public class UserController {
     public static final String USER_CONTROLLER_PATH = "/users";
+    public static final String ID = "/{id}";
     private static final String ONLY_OWNER_BY_ID = """
             @userRepository.findById(#id).get().getEmail() == authentication.getName()
         """;
