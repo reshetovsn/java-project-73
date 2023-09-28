@@ -31,10 +31,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotBlank(message = "FirstName must not be empty")
+    @NotBlank
     private String firstName;
 
-    @NotBlank(message = "LastName must not be empty")
+    @NotBlank
     private String lastName;
 
     @Column(unique = true)
@@ -42,7 +42,7 @@ public class User {
     private String email;
 
     @NotBlank
-    @Size(min = 3, max = 100, message = "Password must be larger than three characters")
+    @Size(min = 3, max = 100)
     @JsonIgnore // Чтобы jackson игнорировал поле при сериализации объекта пользователя в JSON строку
     private String password;
 
