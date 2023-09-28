@@ -1,6 +1,0 @@
-users:
-  - id: 1
-    first_name: Alex
-    last_name: Alex
-    email: alex@gmail.com
-    password: 0987
