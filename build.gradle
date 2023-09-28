@@ -87,6 +87,11 @@ application {
 	mainClass.set("hexlet.code.AppApplication")
 }
 
+wrapper {
+	gradleVersion = '8.2.1'
+	distributionType = Wrapper.DistributionType.ALL
+}
+
 compileJava {
 	options.release = 20
 	options.encoding = 'UTF-8'
@@ -94,6 +99,12 @@ compileJava {
 
 checkstyle {
 	toolVersion '10.12.1'
+}
+
+// Настраиваем таску diffChangeLog таким образом,
+// чтобы миграции учитывали изменения в моделях
+diffChangelog {
+	dependsOn compileJava
 }
 
 task stage(dependsOn: ['clean', 'installDist'])
