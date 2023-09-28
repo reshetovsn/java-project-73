@@ -24,6 +24,5 @@ public class UserDto {
 
     @NotBlank
     @Size(min = 3, max = 100, message = "Password must be larger than three characters")
-    @JsonIgnore
     private String password;
 }
