@@ -62,7 +62,7 @@ public class AppApplicationTest {
 
         assertThat(0).isEqualTo(userRepository.count());
 
-        MockHttpServletRequestBuilder request = post("/users")
+        MockHttpServletRequestBuilder request = post("/api/users")
                 .content(mapper.writeValueAsString(testRegistrationDto))
                 .contentType(APPLICATION_JSON);
         mockMvc.perform(request).andExpect(status().isCreated());
