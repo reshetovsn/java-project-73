@@ -2,6 +2,7 @@ package hexlet.code.controller;
 
 import hexlet.code.dto.UserDto;
 import hexlet.code.model.User;
+import hexlet.code.repository.UserRepository;
 import hexlet.code.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -10,7 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.List;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static hexlet.code.controller.UserController.USER_CONTROLLER_PATH;
 import static org.springframework.http.HttpStatus.CREATED;
-
+@AllArgsConstructor
 @RestController
 @RequestMapping("${base-url}" + USER_CONTROLLER_PATH)
 public class UserController {
@@ -35,9 +36,14 @@ public class UserController {
         """;
     private final UserService userService;
 
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
+    private final UserRepository userRepository;
+
+    @Operation(summary = "Create new user")
+    @ApiResponse(responseCode = "201", description = "User created")
+    @PostMapping
+    @ResponseStatus(CREATED)
+    public User registerNew(@RequestBody @Valid final UserDto dto) {
+        return userService.createNewUser(dto);
     }
 
     // Content используется для указания содержимого ответа
@@ -46,30 +52,24 @@ public class UserController {
         ))
     @GetMapping
     public List<User> getAll() {
-        return userService.getAll();
+        return userRepository.findAll()
+                .stream()
+                .toList();
     }
 
     @ApiResponses(@ApiResponse(responseCode = "200"))
-    @GetMapping("/{id}")
+    @GetMapping(ID)
     public User getUserById(@PathVariable final Long id) {
         return userService.getUserById(id);
     }
 
-    @PostMapping()
-    @Operation(summary = "Create new user")
-    @ApiResponse(responseCode = "201", description = "User created")
-    @ResponseStatus(CREATED)
-    public User createUser(@RequestBody @Valid final UserDto userDto) {
-        return userService.createNewUser(userDto);
-    }
-
-    @PutMapping("/{id}")
+    @PutMapping(ID)
     @PreAuthorize(ONLY_OWNER_BY_ID)
-    public User updateUser(@RequestBody @Valid final UserDto userDto, @PathVariable final long id) {
-        return userService.updateUser(userDto, id);
+    public User updateUser(@PathVariable final long id, @RequestBody @Valid final UserDto dto) {
+        return userService.updateUser(id, dto);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(ID)
     @PreAuthorize(ONLY_OWNER_BY_ID)
     public void deleteUser(@PathVariable final long id) {
         userService.deleteUser(id);

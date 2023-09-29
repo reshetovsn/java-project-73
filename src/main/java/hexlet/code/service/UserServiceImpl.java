@@ -3,7 +3,7 @@ package hexlet.code.service;
 import hexlet.code.dto.UserDto;
 import hexlet.code.model.User;
 import hexlet.code.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,16 +13,11 @@ import java.util.List;
 
 @Service
 @Transactional
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @Override
     public List<User> getAll() {
@@ -45,7 +40,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(UserDto userDto, long id) {
+    public User updateUser(long id, UserDto userDto) {
         User userToUpdate = userRepository.findById(id).orElseThrow();
         userToUpdate.setEmail(userDto.getEmail());
         userToUpdate.setFirstName(userDto.getFirstName());
