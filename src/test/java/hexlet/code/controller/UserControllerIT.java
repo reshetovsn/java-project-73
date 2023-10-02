@@ -1,7 +1,6 @@
 package hexlet.code.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import hexlet.code.dto.UserDto;
 import hexlet.code.dto.LoginDto;
 import hexlet.code.model.User;
@@ -20,12 +19,11 @@ import java.util.List;
 
 import static hexlet.code.utils.TestUtils.TEST_USERNAME;
 import static hexlet.code.utils.TestUtils.TEST_USERNAME_2;
+import static hexlet.code.utils.TestUtils.MAPPER;
+import static hexlet.code.utils.TestUtils.REGISTRATION_DTO;
 import static hexlet.code.utils.TestUtils.fromJson;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -47,13 +45,6 @@ public class UserControllerIT {
     @Autowired
     private TestUtils utils;
 
-    private final ObjectMapper mapper = new ObjectMapper();
-
-    private final UserDto testRegistrationDto = new UserDto(
-            TEST_USERNAME,
-            "Alex",
-            "Alex",
-            "password");
 
     @Test
     public void registration() throws Exception {
@@ -61,7 +52,7 @@ public class UserControllerIT {
         assertThat(0).isEqualTo(userRepository.count());
 
         final MockHttpServletRequestBuilder request = post("/api/users")
-                .content(mapper.writeValueAsString(testRegistrationDto))
+                .content(MAPPER.writeValueAsString(REGISTRATION_DTO))
                 .contentType(APPLICATION_JSON);
 
         final MockHttpServletResponse response = mockMvc.perform(request)
@@ -73,13 +64,17 @@ public class UserControllerIT {
     }
 
     @Test
+    public void twiceRegTheSameUserFail() throws Exception {
+
+        utils.regUser(REGISTRATION_DTO).andExpect(status().isCreated());
+        utils.regUser(REGISTRATION_DTO).andExpect(status().isUnprocessableEntity());
+
+        assertThat(1).isEqualTo(userRepository.count());
+    }
+
+    @Test
     public void getUserById() throws Exception {
-
-        final MockHttpServletRequestBuilder request = post("/api/users")
-                .content(mapper.writeValueAsString(testRegistrationDto))
-                .contentType(APPLICATION_JSON);
-
-        mockMvc.perform(request);
+        utils.regUser(REGISTRATION_DTO);
 
         final User expectedUser = userRepository.findAll().get(0);
 
@@ -100,7 +95,8 @@ public class UserControllerIT {
 
     @Test
     public void getUserByIdFail() throws Exception {
-        utils.regDefaultUser();
+        utils.regUser(REGISTRATION_DTO);
+
         final User expectedUser = userRepository.findAll().get(0);
 
         utils.perform(
@@ -112,11 +108,7 @@ public class UserControllerIT {
 
     @Test
     public void getAllUsers() throws Exception {
-        final MockHttpServletRequestBuilder request = post("/api/users")
-                .content(mapper.writeValueAsString(testRegistrationDto))
-                .contentType(APPLICATION_JSON);
-
-        mockMvc.perform(request);
+        utils.regUser(REGISTRATION_DTO);
 
         final MockHttpServletResponse response = utils.perform(get("/api/users"))
                 .andExpect(status().isOk())
@@ -130,15 +122,15 @@ public class UserControllerIT {
 
     @Test
     public void login() throws Exception {
-        utils.regDefaultUser();
+        utils.regUser(REGISTRATION_DTO);
 
         final LoginDto loginDto = new LoginDto(
-                testRegistrationDto.getEmail(),
-                testRegistrationDto.getPassword()
+                REGISTRATION_DTO.getEmail(),
+                REGISTRATION_DTO.getPassword()
         );
 
         final MockHttpServletRequestBuilder loginRequest = post("/api/login")
-                .content(mapper.writeValueAsString(loginDto))
+                .content(MAPPER.writeValueAsString(loginDto))
                 .contentType(APPLICATION_JSON);
 
         utils.perform(loginRequest).andExpect(status().isOk());
@@ -147,12 +139,12 @@ public class UserControllerIT {
     @Test
     public void loginFail() throws Exception {
         final LoginDto loginDto = new LoginDto(
-                testRegistrationDto.getEmail(),
-                testRegistrationDto.getPassword()
+                REGISTRATION_DTO.getEmail(),
+                REGISTRATION_DTO.getPassword()
         );
 
         final MockHttpServletRequestBuilder loginRequest = post("/api/login")
-                .content(mapper.writeValueAsString(loginDto))
+                .content(MAPPER.writeValueAsString(loginDto))
                 .contentType(APPLICATION_JSON);
 
         utils.perform(loginRequest).andExpect(status().isUnauthorized());
@@ -160,26 +152,26 @@ public class UserControllerIT {
 
     @Test
     public void updateUser() throws Exception {
-        utils.regDefaultUser();
+        utils.regUser(REGISTRATION_DTO);
 
         final Long userId = userRepository.findByEmail(TEST_USERNAME).orElseThrow().getId();
 
         final var userDto = new UserDto("newEmail@mail.ru", "new name", "new last name", "newpassword");
 
         final var updateRequest = put("/api/users/{id}", userId)
-                .content(mapper.writeValueAsString(userDto))
+                .content(MAPPER.writeValueAsString(userDto))
                 .contentType(APPLICATION_JSON);
 
-        utils.perform(updateRequest, "alex@mail.ru").andExpect(status().isOk());
+        utils.perform(updateRequest, TEST_USERNAME).andExpect(status().isOk());
 
-        assertTrue(userRepository.existsById(userId));
-        assertNull(userRepository.findByEmail(TEST_USERNAME).orElse(null));
-        assertNotNull(userRepository.findByEmail("newEmail@mail.ru").orElse(null));
+        assertThat(userRepository.existsById(userId)).isTrue();
+        assertThat(userRepository.findByEmail(TEST_USERNAME)).isNull();
+        assertThat(userRepository.findByEmail("newEmail@mail.ru")).isNotNull();
     }
 
     @Test
     public void deleteUser() throws Exception {
-        utils.regDefaultUser();
+        utils.regUser(REGISTRATION_DTO);
 
         final Long userId = userRepository.findByEmail(TEST_USERNAME).orElseThrow().getId();
 
@@ -191,7 +183,7 @@ public class UserControllerIT {
 
     @Test
     public void deleteUserFails() throws Exception {
-        utils.regDefaultUser();
+        utils.regUser(REGISTRATION_DTO);
 
         UserDto secondUser = new UserDto(
                 TEST_USERNAME_2,
@@ -200,7 +192,7 @@ public class UserControllerIT {
                 "password");
 
         final MockHttpServletRequestBuilder request = post("/api/users")
-                .content(mapper.writeValueAsString(secondUser))
+                .content(MAPPER.writeValueAsString(secondUser))
                 .contentType(APPLICATION_JSON);
         mockMvc.perform(request);
 
