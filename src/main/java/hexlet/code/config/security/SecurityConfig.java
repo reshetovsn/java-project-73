@@ -83,19 +83,30 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests()
+
                 .requestMatchers(publicUrls).permitAll()
-                .anyRequest().authenticated().and()
-                .addFilter(new JWTAuthenticationFilter(
-                        authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)),
-                        loginRequest,
-                        jwtHelper
-                ))
+
+                .anyRequest()
+                .authenticated()
+                .and()
+
+                .addFilter(
+                        new JWTAuthenticationFilter(// аутентификация проходит здесь
+                                authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)),
+                                loginRequest,
+                                jwtHelper
+                        )
+                )
+
                 .addFilterBefore(
                         new JWTAuthorizationFilter(publicUrls, jwtHelper),
                         UsernamePasswordAuthenticationFilter.class
                 )
+
                 .formLogin().disable()
+
                 .sessionManagement().disable()
+
                 .logout().disable();
 
         return http.build();

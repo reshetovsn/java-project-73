@@ -101,8 +101,7 @@ checkstyle {
 	toolVersion '10.12.1'
 }
 
-// Настраиваем таску diffChangeLog таким образом,
-// чтобы миграции учитывали изменения в моделях
+// Настраиваем diffChangeLog таким образом, чтобы миграции учитывали изменения в моделях
 diffChangelog {
 	dependsOn compileJava
 }

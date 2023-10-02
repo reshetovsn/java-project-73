@@ -42,8 +42,9 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 loginData.getEmail(),
                 loginData.getPassword()
         );
+
         setDetails(request, authRequest);
-        return getAuthenticationManager().authenticate(authRequest);
+        return getAuthenticationManager().authenticate(authRequest); // тут вопрос
     }
 
     private LoginDto getLoginData(final HttpServletRequest request) throws AuthenticationException {
