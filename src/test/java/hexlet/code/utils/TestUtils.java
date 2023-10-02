@@ -17,7 +17,6 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 
 import java.util.Map;
 
-import static hexlet.code.controller.TaskStatusController.TASK_STATUS_CONTROLLER_PATH;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -27,8 +26,9 @@ public class TestUtils {
 
     public static final String TEST_USERNAME = "alex@mail.ru";
     public static final String TEST_USERNAME_2 = "max@mail.ru";
+    public static final String TEST_TASK_STATUS_NAME = "First task for tests";
 
-    private final UserDto registrationDto = new UserDto(
+    public static final UserDto REGISTRATION_DTO = new UserDto(
             TEST_USERNAME,
             "Alex",
             "Alex",
@@ -46,7 +46,7 @@ public class TestUtils {
     @Autowired
     private JWTHelper jwtHelper;
 
-    private static final ObjectMapper MAPPER = new ObjectMapper();
+    public static final ObjectMapper MAPPER = new ObjectMapper();
 
 
     public void tearDown() {
@@ -58,24 +58,16 @@ public class TestUtils {
         return userRepository.findByEmail(email).orElseThrow();
     }
 
-    public ResultActions regDefaultUser() throws Exception {
-        return regUser(registrationDto);
-    }
-
-//    public ResultActions createDefaultTaskStatus() throws Exception {
-//        return createTaskStatus(testDtoForTaskStatus);
-//    }
-
     public ResultActions regUser(final UserDto userDto) throws Exception {
         MockHttpServletRequestBuilder request = post("/api/users")
-                .content(MAPPER.writeValueAsString(registrationDto))
+                .content(MAPPER.writeValueAsString(REGISTRATION_DTO))
                 .contentType(APPLICATION_JSON);
 
         return perform(request);
     }
 
     public ResultActions createTaskStatus(final TaskStatusDto taskStatusDto) throws Exception {
-        final MockHttpServletRequestBuilder request = post(TASK_STATUS_CONTROLLER_PATH)
+        final MockHttpServletRequestBuilder request = post("/api/statuses")
                 .content(MAPPER.writeValueAsString(taskStatusDto))
                 .contentType(APPLICATION_JSON);
 
