@@ -41,7 +41,4 @@ public class TaskStatus {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
-    public TaskStatus(final Long id) {
-        this.id = id;
-    }
 }
