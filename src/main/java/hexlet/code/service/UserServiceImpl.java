@@ -21,36 +21,38 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        return userRepository.findAll().stream().toList();
     }
 
     @Override
-    public User getUserById(long id) {
+    public User getUserById(final long id) {
         return userRepository.findById(id).orElseThrow();
     }
 
     @Override
-    public User createNewUser(UserDto userDto) {
-        User newUser = new User();
+    public User createNewUser(final UserDto userDto) {
+        final User newUser = new User();
         newUser.setFirstName(userDto.getFirstName());
         newUser.setLastName(userDto.getLastName());
         newUser.setEmail(userDto.getEmail());
         newUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
+
         return userRepository.save(newUser);
     }
 
     @Override
-    public User updateUser(long id, UserDto userDto) {
-        User userToUpdate = userRepository.findById(id).orElseThrow();
+    public User updateUser(final long id, final UserDto userDto) {
+        final User userToUpdate = userRepository.findById(id).orElseThrow();
         userToUpdate.setEmail(userDto.getEmail());
         userToUpdate.setFirstName(userDto.getFirstName());
         userToUpdate.setLastName(userDto.getLastName());
         userToUpdate.setPassword(passwordEncoder.encode(userDto.getPassword()));
+
         return userRepository.save(userToUpdate);
     }
 
     @Override
-    public void deleteUser(long id) {
+    public void deleteUser(final long id) {
         userRepository.delete(getUserById(id));
     }
 
