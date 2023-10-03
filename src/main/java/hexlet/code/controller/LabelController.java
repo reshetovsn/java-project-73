@@ -34,15 +34,14 @@ public class LabelController {
 
     public static final String LABEL_CONTROLLER_PATH = "/labels";
     public static final String ID = "/{id}";
-
     private final LabelService labelService;
 
     @Operation(summary = "Create a new label")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "Label created",
-            content = @Content(schema = @Schema(implementation = Label.class))),
+                content = @Content(schema = @Schema(implementation = Label.class))),
         @ApiResponse(responseCode = "422", description = "Cannot create label with this data",
-            content = @Content(schema = @Schema(implementation = Label.class)))
+                content = @Content(schema = @Schema(implementation = Label.class)))
     })
     @PostMapping
     @ResponseStatus(CREATED)
@@ -53,9 +52,9 @@ public class LabelController {
     @Operation(summary = "Get all labels")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Labels found",
-            content = @Content(schema = @Schema(implementation = Label.class))),
+                content = @Content(schema = @Schema(implementation = Label.class))),
         @ApiResponse(responseCode = "404", description = "Labels not found",
-            content = @Content(schema = @Schema(implementation = Label.class)))
+                content = @Content(schema = @Schema(implementation = Label.class)))
     })
     @GetMapping
     public List<Label> getAll() {
@@ -65,9 +64,9 @@ public class LabelController {
     @Operation(summary = "Get label by id")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Label found",
-            content = @Content(schema = @Schema(implementation = Label.class))),
+                content = @Content(schema = @Schema(implementation = Label.class))),
         @ApiResponse(responseCode = "404", description = "Label not found",
-            content = @Content(schema = @Schema(implementation = Label.class)))
+                content = @Content(schema = @Schema(implementation = Label.class)))
     })
     @GetMapping(ID)
     public Label getLabelById(@PathVariable final Long id) {
@@ -77,11 +76,11 @@ public class LabelController {
     @Operation(summary = "Update label by id")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Label updated",
-            content = @Content(schema = @Schema(implementation = Label.class))),
+                content = @Content(schema = @Schema(implementation = Label.class))),
         @ApiResponse(responseCode = "422", description = "Cannot update label with this data",
-            content = @Content(schema = @Schema(implementation = Label.class))),
+                content = @Content(schema = @Schema(implementation = Label.class))),
         @ApiResponse(responseCode = "404", description = "Label not found",
-            content = @Content(schema = @Schema(implementation = Label.class)))
+                content = @Content(schema = @Schema(implementation = Label.class)))
     })
     @PutMapping(ID)
     public Label updateLabel(@PathVariable final Long id, @RequestBody @Valid final LabelDto labelDto) {
@@ -91,9 +90,9 @@ public class LabelController {
     @Operation(summary = "Delete label by id")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Label deleted",
-            content = @Content(schema = @Schema(implementation = Label.class))),
+                content = @Content(schema = @Schema(implementation = Label.class))),
         @ApiResponse(responseCode = "404", description = "Label not found",
-            content = @Content(schema = @Schema(implementation = Label.class)))
+                content = @Content(schema = @Schema(implementation = Label.class)))
     })
     @DeleteMapping(ID)
     public void deleteLabel(@PathVariable final Long id) {
