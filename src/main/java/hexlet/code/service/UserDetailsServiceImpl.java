@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 import static hexlet.code.config.security.SecurityConfig.DEFAULT_AUTHORITIES;
 
 @Service
-public class PersonDetailsService implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
 
     @Autowired
-    public PersonDetailsService(UserRepository userRepository) {
+    public UserDetailsServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
