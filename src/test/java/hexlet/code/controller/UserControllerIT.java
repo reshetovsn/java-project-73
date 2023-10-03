@@ -55,7 +55,7 @@ public class UserControllerIT {
         assertThat(0).isEqualTo(userRepository.count());
 
         final MockHttpServletRequestBuilder request = post("/api/users")
-                .content(MAPPER.writeValueAsString(REGISTRATION_DTO))
+                .content(MAPPER.writeValueAsString(REGISTRATION_DTO)) //to do литерал
                 .contentType(APPLICATION_JSON);
 
         final MockHttpServletResponse response = mockMvc.perform(request)
