@@ -5,7 +5,6 @@ import hexlet.code.dto.TaskDto;
 import hexlet.code.model.Label;
 import hexlet.code.model.Task;
 import hexlet.code.model.TaskStatus;
-import hexlet.code.model.User;
 import hexlet.code.repository.TaskRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
