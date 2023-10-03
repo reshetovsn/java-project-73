@@ -32,7 +32,8 @@ public class TaskServiceImpl implements TaskService {
         return taskRepository.findById(id).orElseThrow();
     }
 
-    public List<Task> getAllTasks(Predicate predicate) {// почему здесь предикат?
+    // почему здесь предикат?
+    public List<Task> getAllTasks(Predicate predicate) {
         return (List<Task>) taskRepository.findAll(predicate);
     }
 
