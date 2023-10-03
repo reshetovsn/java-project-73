@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hexlet.code.component.JWTHelper;
+import hexlet.code.dto.LabelDto;
+import hexlet.code.dto.TaskDto;
 import hexlet.code.dto.TaskStatusDto;
 import hexlet.code.dto.UserDto;
 import hexlet.code.model.User;
@@ -26,13 +28,15 @@ public class TestUtils {
 
     public static final String TEST_USERNAME = "alex@mail.ru";
     public static final String TEST_USERNAME_2 = "max@mail.ru";
-    public static final String TEST_TASK_STATUS_NAME = "First task for tests";
-
+    public static final String TEST_TASK_STATUS_NAME = "TaskStatusName";
+    public static final String TEST_TASK_NAME = "TaskName";
+    public static final String TEST_TASK_DESCRIPTION = "TaskDescription";
     public static final UserDto REGISTRATION_DTO = new UserDto(
             TEST_USERNAME,
             "Alex",
             "Alex",
             "password");
+    public static final TaskStatusDto TASK_STATUS_DTO = new TaskStatusDto(TEST_TASK_STATUS_NAME);
 
     @Autowired
     private MockMvc mockMvc;
@@ -60,7 +64,7 @@ public class TestUtils {
 
     public ResultActions regUser(final UserDto userDto) throws Exception {
         MockHttpServletRequestBuilder request = post("/api/users")
-                .content(MAPPER.writeValueAsString(REGISTRATION_DTO))
+                .content(MAPPER.writeValueAsString(userDto))
                 .contentType(APPLICATION_JSON);
 
         return perform(request);
@@ -69,6 +73,22 @@ public class TestUtils {
     public ResultActions createTaskStatus(final TaskStatusDto taskStatusDto) throws Exception {
         final MockHttpServletRequestBuilder request = post("/api/statuses")
                 .content(MAPPER.writeValueAsString(taskStatusDto))
+                .contentType(APPLICATION_JSON);
+
+        return perform(request, TEST_USERNAME);
+    }
+
+    public ResultActions createTask(final TaskDto taskDto) throws Exception {
+        final MockHttpServletRequestBuilder request = post("/api/tasks")
+                .content(MAPPER.writeValueAsString(taskDto))
+                .contentType(APPLICATION_JSON);
+
+        return perform(request, TEST_USERNAME);
+    }
+
+    public ResultActions createLabel(final LabelDto labelDto) throws Exception {
+        final MockHttpServletRequestBuilder request = post("/api/labels")
+                .content(MAPPER.writeValueAsString(labelDto))
                 .contentType(APPLICATION_JSON);
 
         return perform(request, TEST_USERNAME);
