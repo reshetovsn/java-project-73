@@ -25,6 +25,7 @@ import static hexlet.code.utils.TestUtils.TEST_TASK_STATUS_NAME;
 import static hexlet.code.utils.TestUtils.TEST_USERNAME;
 import static hexlet.code.utils.TestUtils.REGISTRATION_DTO;
 import static hexlet.code.utils.TestUtils.MAPPER;
+import static hexlet.code.utils.TestUtils.TASK_STATUS_DTO;
 import static hexlet.code.utils.TestUtils.fromJson;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
@@ -47,8 +48,6 @@ public class TaskStatusControllerIT {
     @Autowired
     private TestUtils utils;
 
-    private final TaskStatusDto taskStatusDto = new TaskStatusDto(TEST_TASK_STATUS_NAME);
-
     @BeforeEach
     public void before() throws Exception {
         utils.regUser(REGISTRATION_DTO);
@@ -63,7 +62,7 @@ public class TaskStatusControllerIT {
     public void createTaskStatus() throws Exception {
         assertThat(0).isEqualTo(taskStatusRepository.count());
 
-        MockHttpServletResponse response = utils.createTaskStatus(taskStatusDto)
+        MockHttpServletResponse response = utils.createTaskStatus(TASK_STATUS_DTO)
                 .andExpect(status().isCreated())
                 .andReturn()
                 .getResponse();
@@ -87,15 +86,15 @@ public class TaskStatusControllerIT {
 
     @Test
     public void twiceCreateTheSameTaskStatusFail() throws Exception {
-        utils.createTaskStatus(taskStatusDto).andExpect(status().isCreated());
-        utils.createTaskStatus(taskStatusDto).andExpect(status().isUnprocessableEntity());
+        utils.createTaskStatus(TASK_STATUS_DTO).andExpect(status().isCreated());
+        utils.createTaskStatus(TASK_STATUS_DTO).andExpect(status().isUnprocessableEntity());
 
         assertThat(1).isEqualTo(taskStatusRepository.count());
     }
 
     @Test
     public void getTaskStatusById() throws Exception {
-        utils.createTaskStatus(taskStatusDto);
+        utils.createTaskStatus(TASK_STATUS_DTO);
 
         final TaskStatus expectedTaskStatus = taskStatusRepository.findAll().get(0);
         final MockHttpServletResponse response = utils.perform(
@@ -114,7 +113,7 @@ public class TaskStatusControllerIT {
 
     @Test
     public void getTaskStatusByIdFail() throws Exception {
-        utils.createTaskStatus(taskStatusDto);
+        utils.createTaskStatus(TASK_STATUS_DTO);
 
         final TaskStatus expectedTaskStatus = taskStatusRepository.findAll().get(0);
 
@@ -127,7 +126,7 @@ public class TaskStatusControllerIT {
 
     @Test
     public void getAllTaskStatuses() throws Exception {
-        utils.createTaskStatus(taskStatusDto);
+        utils.createTaskStatus(TASK_STATUS_DTO);
 
         final MockHttpServletResponse response = utils.perform(
                         get("/api/statuses"),
@@ -144,7 +143,7 @@ public class TaskStatusControllerIT {
 
     @Test
     public void updateTaskStatus() throws Exception {
-        utils.createTaskStatus(taskStatusDto);
+        utils.createTaskStatus(TASK_STATUS_DTO);
 
         final Long taskStatusId = taskStatusRepository.findByName(TEST_TASK_STATUS_NAME).orElseThrow().getId();
 
@@ -167,7 +166,7 @@ public class TaskStatusControllerIT {
 
     @Test
     public void updateTaskStatusFail() throws Exception {
-        utils.createTaskStatus(taskStatusDto);
+        utils.createTaskStatus(TASK_STATUS_DTO);
 
         final Long taskStatusId = taskStatusRepository.findByName(TEST_TASK_STATUS_NAME).orElseThrow().getId();
 
@@ -184,7 +183,7 @@ public class TaskStatusControllerIT {
 
     @Test
     public void deleteTaskStatus() throws Exception {
-        utils.createTaskStatus(taskStatusDto);
+        utils.createTaskStatus(TASK_STATUS_DTO);
 
         final Long taskStatusId = taskStatusRepository.findByName(TEST_TASK_STATUS_NAME).orElseThrow().getId();
 
@@ -196,7 +195,7 @@ public class TaskStatusControllerIT {
 
     @Test
     public void deleteTaskStatusFail() throws Exception {
-        utils.createTaskStatus(taskStatusDto);
+        utils.createTaskStatus(TASK_STATUS_DTO);
 
         final Long taskStatusId = taskStatusRepository.findByName(TEST_TASK_STATUS_NAME).orElseThrow().getId();
 
