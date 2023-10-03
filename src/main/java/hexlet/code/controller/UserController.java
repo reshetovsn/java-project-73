@@ -36,39 +36,66 @@ public class UserController {
         """;
     private final UserService userService;
 
-    private final UserRepository userRepository;
-
-    @Operation(summary = "Create new user")
-    @ApiResponse(responseCode = "201", description = "User created")
+    @Operation(summary = "Create a new user")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "User created",
+                content = @Content(schema = @Schema(implementation = User.class))),
+        @ApiResponse(responseCode = "422", description = "Cannot create user with this data",
+                content = @Content(schema = @Schema(implementation = User.class)))
+    })
     @PostMapping
     @ResponseStatus(CREATED)
     public User registerNew(@RequestBody @Valid final UserDto dto) {
         return userService.createNewUser(dto);
     }
 
+    @Operation(summary = "Get all users")
     // Content используется для указания содержимого ответа
-    @ApiResponses(@ApiResponse(responseCode = "200", content =
-        @Content(schema = @Schema(implementation = User.class)) // Указываем тип содержимого ответа
-        ))
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Users found",
+                content = @Content(schema = @Schema(implementation = User.class))), // Указываем тип содержимого ответа
+        @ApiResponse(responseCode = "404", description = "Users not found",
+                content = @Content(schema = @Schema(implementation = User.class)))
+    })
     @GetMapping
-    public List<User> getAll() {
-        return userRepository.findAll()
-                .stream()
-                .toList();
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
     }
 
-    @ApiResponses(@ApiResponse(responseCode = "200"))
+    @Operation(summary = "Get user by id")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "User found",
+                content = @Content(schema = @Schema(implementation = User.class))),
+        @ApiResponse(responseCode = "404", description = "User not found",
+                content = @Content(schema = @Schema(implementation = User.class)))
+    })
     @GetMapping(ID)
     public User getUserById(@PathVariable final Long id) {
         return userService.getUserById(id);
     }
 
+    @Operation(summary = "Update user by id")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "User updated",
+                content = @Content(schema = @Schema(implementation = User.class))),
+        @ApiResponse(responseCode = "422", description = "Cannot update user with this data",
+                content = @Content(schema = @Schema(implementation = User.class))),
+        @ApiResponse(responseCode = "404", description = "User not found",
+                content = @Content(schema = @Schema(implementation = User.class)))
+    })
     @PutMapping(ID)
     @PreAuthorize(ONLY_OWNER_BY_ID)
     public User updateUser(@PathVariable final long id, @RequestBody @Valid final UserDto dto) {
         return userService.updateUser(id, dto);
     }
 
+    @Operation(summary = "Delete user by id")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "User deleted",
+                content = @Content(schema =  @Schema(implementation = User.class))),
+        @ApiResponse(responseCode = "404", description = "User not found",
+                content = @Content(schema = @Schema(implementation = User.class)))
+    })
     @DeleteMapping(ID)
     @PreAuthorize(ONLY_OWNER_BY_ID)
     public void deleteUser(@PathVariable final long id) {
