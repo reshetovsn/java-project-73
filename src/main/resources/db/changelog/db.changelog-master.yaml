@@ -190,4 +190,3 @@ databaseChangeLog:
         referencedColumnNames: id
         referencedTableName: users
         validate: true
-
