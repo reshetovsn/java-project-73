@@ -15,7 +15,7 @@ public class TaskStatusServiceImpl implements TaskStatusService {
 
     private final TaskStatusRepository taskStatusRepository;
     @Override
-    public TaskStatus getTaskStatusById(Long id) {
+    public TaskStatus getTaskStatusById(final Long id) {
         return taskStatusRepository.findById(id).orElseThrow();
     }
 
@@ -25,29 +25,24 @@ public class TaskStatusServiceImpl implements TaskStatusService {
     }
 
     @Override
-    public TaskStatus createNewTaskStatus(TaskStatusDto taskStatusDto) {
-        final TaskStatus newTaskStatus = fromDto(taskStatusDto);
+    public TaskStatus createNewTaskStatus(final TaskStatusDto taskStatusDto) {
+        final TaskStatus newTaskStatus = new TaskStatus();
+        newTaskStatus.setName(taskStatusDto.getName());
 
         return taskStatusRepository.save(newTaskStatus);
     }
 
     @Override
-    public TaskStatus updateTaskStatus(Long id, TaskStatusDto taskStatusDto) {
-        TaskStatus taskStatusForUpdate = taskStatusRepository.findById(id).orElseThrow();
-        taskStatusForUpdate.setName(fromDto(taskStatusDto).getName());
+    public TaskStatus updateTaskStatus(final Long id, final TaskStatusDto taskStatusDto) {
+        final TaskStatus taskStatusForUpdate = taskStatusRepository.findById(id).orElseThrow();
+        taskStatusForUpdate.setName(taskStatusDto.getName());
 
         return taskStatusRepository.save(taskStatusForUpdate);
     }
 
     @Override
-    public void deleteTaskStatus(Long id) {
-        TaskStatus taskStatusForUpdate = taskStatusRepository.findById(id).orElseThrow();
-        taskStatusRepository.delete(taskStatusForUpdate);
-    }
-
-    private TaskStatus fromDto(final TaskStatusDto taskStatusDto) {
-        return TaskStatus.builder()
-                .name(taskStatusDto.getName())
-                .build();
+    public void deleteTaskStatus(final Long id) {
+        TaskStatus taskStatusForDelete = taskStatusRepository.findById(id).orElseThrow();
+        taskStatusRepository.delete(taskStatusForDelete);
     }
 }
