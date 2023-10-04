@@ -62,7 +62,7 @@ public class TaskStatusControllerIT {
     public void createTaskStatus() throws Exception {
         assertThat(0).isEqualTo(taskStatusRepository.count());
 
-        MockHttpServletResponse response = utils.createTaskStatus(TASK_STATUS_DTO)
+        final MockHttpServletResponse response = utils.createTaskStatus(TASK_STATUS_DTO)
                 .andExpect(status().isCreated())
                 .andReturn()
                 .getResponse();
