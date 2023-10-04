@@ -48,7 +48,7 @@ dependencies {
 			'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0',
 			'org.liquibase:liquibase-core',
 			'com.querydsl:querydsl-jpa:5.0.0:jakarta',
-			'com.rollbar:rollbar-spring-boot-webmvc:1.10.0'
+			'com.rollbar:rollbar-spring-boot3-webmvc:1.10.0'
 	)
 
 	liquibaseRuntime(
