@@ -8,7 +8,6 @@ import hexlet.code.dto.LabelDto;
 import hexlet.code.dto.TaskDto;
 import hexlet.code.dto.TaskStatusDto;
 import hexlet.code.dto.UserDto;
-import hexlet.code.model.User;
 import hexlet.code.repository.LabelRepository;
 import hexlet.code.repository.TaskRepository;
 import hexlet.code.repository.TaskStatusRepository;
@@ -35,11 +34,12 @@ public class TestUtils {
     public static final String TEST_TASK_DESCRIPTION = "TaskDescription";
     public static final String TEST_LABEL_NAME = "labelName1";
     public static final String TEST_LABEL_NAME_2 = "labelName2";
-    public static final UserDto REGISTRATION_DTO = new UserDto(
+    public static final UserDto USER_DTO = new UserDto(
             TEST_USERNAME,
             "Alex",
             "Alex",
             "password");
+
     public static final TaskStatusDto TASK_STATUS_DTO = new TaskStatusDto(TEST_TASK_STATUS_NAME);
     public static final LabelDto LABEL_DTO = new LabelDto(TEST_LABEL_NAME);
     public static final ObjectMapper MAPPER = new ObjectMapper();
@@ -62,10 +62,6 @@ public class TestUtils {
         userRepository.deleteAll();
         taskRepository.deleteAll();
         labelRepository.deleteAll();
-    }
-
-    public User getUserByEmail(final String email) {
-        return userRepository.findByEmail(email).orElseThrow();
     }
 
     public ResultActions regUser(final UserDto userDto) throws Exception {

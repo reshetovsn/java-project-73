@@ -21,11 +21,11 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import java.util.List;
 
 import static hexlet.code.config.SpringConfigForIT.TEST_PROFILE;
-import static hexlet.code.utils.TestUtils.TEST_TASK_STATUS_NAME;
+import static hexlet.code.utils.TestUtils.USER_DTO;
 import static hexlet.code.utils.TestUtils.TEST_USERNAME;
-import static hexlet.code.utils.TestUtils.REGISTRATION_DTO;
-import static hexlet.code.utils.TestUtils.MAPPER;
 import static hexlet.code.utils.TestUtils.TASK_STATUS_DTO;
+import static hexlet.code.utils.TestUtils.TEST_TASK_STATUS_NAME;
+import static hexlet.code.utils.TestUtils.MAPPER;
 import static hexlet.code.utils.TestUtils.fromJson;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
@@ -44,13 +44,12 @@ public class TaskStatusControllerIT {
 
     @Autowired
     private TaskStatusRepository taskStatusRepository;
-
     @Autowired
     private TestUtils utils;
 
     @BeforeEach
     public void before() throws Exception {
-        utils.regUser(REGISTRATION_DTO);
+        utils.regUser(USER_DTO);
     }
 
     @AfterEach

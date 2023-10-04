@@ -21,13 +21,13 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import java.util.List;
 
 import static hexlet.code.config.SpringConfigForIT.TEST_PROFILE;
+import static hexlet.code.utils.TestUtils.USER_DTO;
+import static hexlet.code.utils.TestUtils.TEST_USERNAME;
+import static hexlet.code.utils.TestUtils.LABEL_DTO;
 import static hexlet.code.utils.TestUtils.TEST_LABEL_NAME;
 import static hexlet.code.utils.TestUtils.TEST_LABEL_NAME_2;
-import static hexlet.code.utils.TestUtils.TEST_USERNAME;
-import static hexlet.code.utils.TestUtils.fromJson;
-import static hexlet.code.utils.TestUtils.REGISTRATION_DTO;
 import static hexlet.code.utils.TestUtils.MAPPER;
-import static hexlet.code.utils.TestUtils.LABEL_DTO;
+import static hexlet.code.utils.TestUtils.fromJson;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -45,13 +45,12 @@ public class LabelControllerIT {
 
     @Autowired
     private LabelRepository labelRepository;
-
     @Autowired
     private TestUtils utils;
 
     @BeforeEach
     public void before() throws Exception {
-        utils.regUser(REGISTRATION_DTO);
+        utils.regUser(USER_DTO);
     }
 
     @AfterEach

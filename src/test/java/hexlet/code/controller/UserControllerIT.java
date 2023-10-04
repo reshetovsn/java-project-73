@@ -22,10 +22,10 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import java.util.List;
 
 import static hexlet.code.config.SpringConfigForIT.TEST_PROFILE;
+import static hexlet.code.utils.TestUtils.USER_DTO;
 import static hexlet.code.utils.TestUtils.TEST_USERNAME;
 import static hexlet.code.utils.TestUtils.TEST_USERNAME_2;
 import static hexlet.code.utils.TestUtils.MAPPER;
-import static hexlet.code.utils.TestUtils.REGISTRATION_DTO;
 import static hexlet.code.utils.TestUtils.fromJson;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -48,10 +48,8 @@ public class UserControllerIT {
 
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private TestUtils utils;
 
@@ -66,7 +64,7 @@ public class UserControllerIT {
         assertThat(0).isEqualTo(userRepository.count());
 
         final MockHttpServletRequestBuilder request = post("/api/users")
-                .content(MAPPER.writeValueAsString(REGISTRATION_DTO)) //to do литерал
+                .content(MAPPER.writeValueAsString(USER_DTO)) //to do литерал
                 .contentType(APPLICATION_JSON);
 
         final MockHttpServletResponse response = mockMvc.perform(request)
@@ -80,15 +78,15 @@ public class UserControllerIT {
     @Test
     public void twiceRegTheSameUserFail() throws Exception {
 
-        utils.regUser(REGISTRATION_DTO).andExpect(status().isCreated());
-        utils.regUser(REGISTRATION_DTO).andExpect(status().isUnprocessableEntity());
+        utils.regUser(USER_DTO).andExpect(status().isCreated());
+        utils.regUser(USER_DTO).andExpect(status().isUnprocessableEntity());
 
         assertThat(1).isEqualTo(userRepository.count());
     }
 
     @Test
     public void getUserById() throws Exception {
-        utils.regUser(REGISTRATION_DTO);
+        utils.regUser(USER_DTO);
 
         final User expectedUser = userRepository.findAll().get(0);
 
@@ -109,7 +107,7 @@ public class UserControllerIT {
 
     @Test
     public void getUserByIdFail() throws Exception {
-        utils.regUser(REGISTRATION_DTO);
+        utils.regUser(USER_DTO);
 
         final User expectedUser = userRepository.findAll().get(0);
 
@@ -122,7 +120,7 @@ public class UserControllerIT {
 
     @Test
     public void getAllUsers() throws Exception {
-        utils.regUser(REGISTRATION_DTO);
+        utils.regUser(USER_DTO);
 
         final MockHttpServletResponse response = utils.perform(get("/api/users"))
                 .andExpect(status().isOk())
@@ -136,11 +134,11 @@ public class UserControllerIT {
 
     @Test
     public void login() throws Exception {
-        utils.regUser(REGISTRATION_DTO);
+        utils.regUser(USER_DTO);
 
         final LoginDto loginDto = new LoginDto(
-                REGISTRATION_DTO.getEmail(),
-                REGISTRATION_DTO.getPassword()
+                USER_DTO.getEmail(),
+                USER_DTO.getPassword()
         );
 
         final MockHttpServletRequestBuilder loginRequest = post("/api/login")
@@ -153,8 +151,8 @@ public class UserControllerIT {
     @Test
     public void loginFail() throws Exception {
         final LoginDto loginDto = new LoginDto(
-                REGISTRATION_DTO.getEmail(),
-                REGISTRATION_DTO.getPassword()
+                USER_DTO.getEmail(),
+                USER_DTO.getPassword()
         );
 
         final MockHttpServletRequestBuilder loginRequest = post("/api/login")
@@ -166,7 +164,7 @@ public class UserControllerIT {
 
     @Test
     public void updateUser() throws Exception {
-        utils.regUser(REGISTRATION_DTO);
+        utils.regUser(USER_DTO);
 
         final Long userId = userRepository.findByEmail(TEST_USERNAME).orElseThrow().getId();
 
@@ -185,7 +183,7 @@ public class UserControllerIT {
 
     @Test
     public void deleteUser() throws Exception {
-        utils.regUser(REGISTRATION_DTO);
+        utils.regUser(USER_DTO);
 
         final Long userId = userRepository.findByEmail(TEST_USERNAME).orElseThrow().getId();
 
@@ -197,7 +195,7 @@ public class UserControllerIT {
 
     @Test
     public void deleteUserFails() throws Exception {
-        utils.regUser(REGISTRATION_DTO);
+        utils.regUser(USER_DTO);
 
         UserDto secondUser = new UserDto(
                 TEST_USERNAME_2,
