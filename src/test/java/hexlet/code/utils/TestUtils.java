@@ -9,6 +9,8 @@ import hexlet.code.dto.TaskDto;
 import hexlet.code.dto.TaskStatusDto;
 import hexlet.code.dto.UserDto;
 import hexlet.code.model.User;
+import hexlet.code.repository.LabelRepository;
+import hexlet.code.repository.TaskRepository;
 import hexlet.code.repository.TaskStatusRepository;
 import hexlet.code.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,31 +33,35 @@ public class TestUtils {
     public static final String TEST_TASK_STATUS_NAME = "TaskStatusName";
     public static final String TEST_TASK_NAME = "TaskName";
     public static final String TEST_TASK_DESCRIPTION = "TaskDescription";
+    public static final String TEST_LABEL_NAME = "labelName1";
+    public static final String TEST_LABEL_NAME_2 = "labelName2";
     public static final UserDto REGISTRATION_DTO = new UserDto(
             TEST_USERNAME,
             "Alex",
             "Alex",
             "password");
     public static final TaskStatusDto TASK_STATUS_DTO = new TaskStatusDto(TEST_TASK_STATUS_NAME);
+    public static final LabelDto LABEL_DTO = new LabelDto(TEST_LABEL_NAME);
+    public static final ObjectMapper MAPPER = new ObjectMapper();
 
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private TaskStatusRepository taskStatusRepository;
-
+    @Autowired
+    private TaskRepository taskRepository;
+    @Autowired
+    private LabelRepository labelRepository;
     @Autowired
     private JWTHelper jwtHelper;
-
-    public static final ObjectMapper MAPPER = new ObjectMapper();
-
 
     public void tearDown() {
         taskStatusRepository.deleteAll();
         userRepository.deleteAll();
+        taskRepository.deleteAll();
+        labelRepository.deleteAll();
     }
 
     public User getUserByEmail(final String email) {
