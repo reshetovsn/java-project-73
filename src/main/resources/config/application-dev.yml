@@ -2,6 +2,10 @@ server:
   error:
     include-stacktrace: never
 
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
 spring:
   # Настраиваем подключение к базе данных
   datasource:
