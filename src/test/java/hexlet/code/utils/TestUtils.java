@@ -23,6 +23,7 @@ import java.util.Map;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY;
 
 @Component
 public class TestUtils {
@@ -42,7 +43,7 @@ public class TestUtils {
 
     public static final TaskStatusDto TASK_STATUS_DTO = new TaskStatusDto(TEST_TASK_STATUS_NAME);
     public static final LabelDto LABEL_DTO = new LabelDto(TEST_LABEL_NAME);
-    public static final ObjectMapper MAPPER = new ObjectMapper();
+    public static final ObjectMapper MAPPER = new ObjectMapper().findAndRegisterModules();
 
     @Autowired
     private MockMvc mockMvc;
@@ -58,10 +59,10 @@ public class TestUtils {
     private JWTHelper jwtHelper;
 
     public void tearDown() {
-        taskStatusRepository.deleteAll();
-        userRepository.deleteAll();
         taskRepository.deleteAll();
+        taskStatusRepository.deleteAll();
         labelRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     public ResultActions regUser(final UserDto userDto) throws Exception {
@@ -109,5 +110,20 @@ public class TestUtils {
 
     public static <T> T fromJson(final String json, final TypeReference<T> to) throws JsonProcessingException {
         return MAPPER.readValue(json, to);
+    }
+
+    public ResultActions performAuthorizedRequest(final MockHttpServletRequestBuilder request) throws Exception {
+        final String token = jwtHelper.expiring(Map.of(SPRING_SECURITY_FORM_USERNAME_KEY, TEST_USERNAME));
+        request.header(AUTHORIZATION, token);
+
+        return perform(request);
+    }
+
+    public ResultActions performAuthorizedRequest(
+            final MockHttpServletRequestBuilder request, String newUser) throws Exception {
+        final String token = jwtHelper.expiring(Map.of(SPRING_SECURITY_FORM_USERNAME_KEY, newUser));
+        request.header(AUTHORIZATION, token);
+
+        return perform(request);
     }
 }
