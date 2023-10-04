@@ -23,5 +23,3 @@ spring:
 logging:
   level:
     root: INFO
-
-rollbar_token: 8a4f3a763ae14126af36b5bd7ff7436d
