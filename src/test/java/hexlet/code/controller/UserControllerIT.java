@@ -1,22 +1,27 @@
 package hexlet.code.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import hexlet.code.config.SpringConfigForIT;
 import hexlet.code.dto.UserDto;
 import hexlet.code.dto.LoginDto;
 import hexlet.code.model.User;
 import hexlet.code.repository.UserRepository;
 import hexlet.code.utils.TestUtils;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static hexlet.code.config.SpringConfigForIT.TEST_PROFILE;
 import static hexlet.code.utils.TestUtils.TEST_USERNAME;
 import static hexlet.code.utils.TestUtils.TEST_USERNAME_2;
 import static hexlet.code.utils.TestUtils.MAPPER;
@@ -27,6 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -34,9 +40,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
 @AutoConfigureMockMvc
-@Transactional
+@ActiveProfiles(TEST_PROFILE)
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = RANDOM_PORT, classes = SpringConfigForIT.class)
 public class UserControllerIT {
 
     @Autowired
@@ -48,6 +55,10 @@ public class UserControllerIT {
     @Autowired
     private TestUtils utils;
 
+    @AfterEach
+    public void clear() {
+        utils.tearDown();
+    }
 
     @Test
     public void registration() throws Exception {
@@ -66,14 +77,14 @@ public class UserControllerIT {
         assertThat(1).isEqualTo(userRepository.count());
     }
 
-//    @Test
-//    public void twiceRegTheSameUserFail() throws Exception {
-//
-//        utils.regUser(REGISTRATION_DTO).andExpect(status().isCreated());
-//        utils.regUser(REGISTRATION_DTO).andExpect(status().isUnprocessableEntity());
-//
-//        assertThat(1).isEqualTo(userRepository.count());
-//    }
+    @Test
+    public void twiceRegTheSameUserFail() throws Exception {
+
+        utils.regUser(REGISTRATION_DTO).andExpect(status().isCreated());
+        utils.regUser(REGISTRATION_DTO).andExpect(status().isUnprocessableEntity());
+
+        assertThat(1).isEqualTo(userRepository.count());
+    }
 
     @Test
     public void getUserById() throws Exception {
