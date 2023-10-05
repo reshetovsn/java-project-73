@@ -23,7 +23,6 @@ import java.util.Map;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY;
 
 @Component
 public class TestUtils {
@@ -110,20 +109,5 @@ public class TestUtils {
 
     public static <T> T fromJson(final String json, final TypeReference<T> to) throws JsonProcessingException {
         return MAPPER.readValue(json, to);
-    }
-
-    public ResultActions performAuthorizedRequest(final MockHttpServletRequestBuilder request) throws Exception {
-        final String token = jwtHelper.expiring(Map.of(SPRING_SECURITY_FORM_USERNAME_KEY, TEST_USERNAME));
-        request.header(AUTHORIZATION, token);
-
-        return perform(request);
-    }
-
-    public ResultActions performAuthorizedRequest(
-            final MockHttpServletRequestBuilder request, String newUser) throws Exception {
-        final String token = jwtHelper.expiring(Map.of(SPRING_SECURITY_FORM_USERNAME_KEY, newUser));
-        request.header(AUTHORIZATION, token);
-
-        return perform(request);
     }
 }
