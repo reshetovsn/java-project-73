@@ -11,6 +11,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -81,15 +82,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .authorizeHttpRequests()
-
-                .requestMatchers(publicUrls).permitAll()
-
-                .anyRequest()
-                .authenticated()
-                .and()
-
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth.
+                        requestMatchers(publicUrls).permitAll()
+                        .anyRequest()
+                        .authenticated())
                 .addFilter(
                         new JWTAuthenticationFilter(// аутентификация проходит здесь
                                 authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)),
@@ -97,17 +94,13 @@ public class SecurityConfig {
                                 jwtHelper
                         )
                 )
-
                 .addFilterBefore(
                         new JWTAuthorizationFilter(publicUrls, jwtHelper),
                         UsernamePasswordAuthenticationFilter.class
                 )
-
-                .formLogin().disable()
-
-                .sessionManagement().disable()
-
-                .logout().disable();
+                .formLogin(AbstractHttpConfigurer::disable)
+                .sessionManagement(AbstractHttpConfigurer::disable)
+                .logout(AbstractHttpConfigurer::disable);
 
         return http.build();
     }
