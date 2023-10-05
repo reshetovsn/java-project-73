@@ -169,7 +169,6 @@ public class TaskControllerIT {
             assertThat(task.getName()).isEqualTo(expectedTasks.get(i).getName());
             i++;
         }
-//        assertThat(tasks).containsAll(expectedTasks);
     }
 
     @Test
