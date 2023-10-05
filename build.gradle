@@ -160,13 +160,10 @@ processResources.dependsOn assembleFrontend
 task stage(dependsOn: ['clean', 'installDist'])
 installDist.mustRunAfter clean
 
-checkstyleMain.source = "src/main/java"
+checkstyleMain.source = "**/src/main/java"
 
 checkstyleMain.exclude (
 		'**/hexlet/code/AppApplication**',
 		'**/hexlet/code/ServletInitializer**'
 )
 
-tasks.withType(Checkstyle).configureEach {
-	exclude '**/src/main/java/hexlet/code/AppApplication**'
-}
