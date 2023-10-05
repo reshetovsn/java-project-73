@@ -40,9 +40,6 @@ import static hexlet.code.utils.TestUtils.TEST_LABEL_NAME;
 import static hexlet.code.utils.TestUtils.MAPPER;
 import static hexlet.code.utils.TestUtils.fromJson;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -111,7 +108,7 @@ public class TaskControllerIT {
         utils.createTask(buildTaskDto()).andExpect(status().isCreated());
         utils.createTask(buildTaskDto()).andExpect(status().isUnprocessableEntity());
 
-        assertEquals(1, taskRepository.count());
+        assertThat(1).isEqualTo(taskRepository.count());
     }
 
     @Test
@@ -129,12 +126,12 @@ public class TaskControllerIT {
 
         final Task task = fromJson(response.getContentAsString(), new TypeReference<>() { });
 
-        assertEquals(expectedTask.getId(), task.getId());
-        assertEquals(expectedTask.getName(), task.getName());
-        assertEquals(expectedTask.getDescription(), task.getDescription());
-        assertEquals(expectedTask.getTaskStatus().getName(), task.getTaskStatus().getName());
-        assertEquals(expectedTask.getAuthor().getEmail(), task.getAuthor().getEmail());
-        assertEquals(expectedTask.getExecutor().getEmail(), task.getExecutor().getEmail());
+        assertThat(expectedTask.getId()).isEqualTo(task.getId());
+        assertThat(expectedTask.getName()).isEqualTo(task.getName());
+        assertThat(expectedTask.getDescription()).isEqualTo(task.getDescription());
+        assertThat(expectedTask.getTaskStatus().getName()).isEqualTo(task.getTaskStatus().getName());
+        assertThat(expectedTask.getAuthor().getEmail()).isEqualTo(task.getAuthor().getEmail());
+        assertThat(expectedTask.getExecutor().getEmail()).isEqualTo(task.getExecutor().getEmail());
     }
 
     @Test
@@ -168,8 +165,8 @@ public class TaskControllerIT {
         assertThat(tasks).hasSize(1);
         int i = 0;
         for (var task : tasks) {
-            assertEquals(task.getId(), expectedTasks.get(i).getId());
-            assertEquals(task.getName(), expectedTasks.get(i).getName());
+            assertThat(task.getId()).isEqualTo(expectedTasks.get(i).getId());
+            assertThat(task.getName()).isEqualTo(expectedTasks.get(i).getName());
             i++;
         }
 //        assertThat(tasks).containsAll(expectedTasks);
@@ -202,11 +199,12 @@ public class TaskControllerIT {
         final Long currentLabelId = currentTask.getLabels().stream().findFirst().orElseThrow().getId();
 
         assertThat(tasks).hasSize(1);
-        assertEquals(expectedTask.getName(), currentTask.getName());
-        assertEquals(expectedTask.getTaskStatus().getName(), currentTask.getTaskStatus().getName());
-        assertEquals(expectedTask.getExecutor().getEmail(), currentTask.getExecutor().getEmail());
-        assertEquals(expectedTask.getAuthor().getFirstName(), currentTask.getAuthor().getFirstName());
-        assertEquals(expectedLabelId, currentLabelId);
+        assertThat(expectedTask.getName()).isEqualTo(currentTask.getName());
+        assertThat(expectedTask.getDescription()).isEqualTo(currentTask.getDescription());
+        assertThat(expectedTask.getTaskStatus().getName()).isEqualTo(currentTask.getTaskStatus().getName());
+        assertThat(expectedTask.getAuthor().getEmail()).isEqualTo(currentTask.getAuthor().getEmail());
+        assertThat(expectedTask.getExecutor().getEmail()).isEqualTo(currentTask.getExecutor().getEmail());
+        assertThat(expectedLabelId).isEqualTo(currentLabelId);
     }
 
     @Test
@@ -227,9 +225,9 @@ public class TaskControllerIT {
 
         final Task expectedTask = taskRepository.findAll().get(0);
 
-        assertEquals(expectedTask.getId(), taskId);
-        assertNotEquals(expectedTask.getName(), TEST_TASK_NAME);
-        assertEquals(expectedTask.getName(), taskDtoForUpdate.getName());
+        assertThat(expectedTask.getId()).isEqualTo(taskId);
+        assertThat(expectedTask.getName()).isNotEqualTo(TEST_TASK_NAME);
+        assertThat(expectedTask.getName()).isEqualTo(taskDtoForUpdate.getName());
     }
 
     @Test
@@ -259,7 +257,7 @@ public class TaskControllerIT {
         utils.perform(delete("/api/tasks" + "/{id}", taskId), TEST_USERNAME)
                 .andExpect(status().isOk());
 
-        assertFalse(taskRepository.existsById(taskId));
+        assertThat(taskRepository.existsById(taskId)).isFalse();
     }
 
     @Test
