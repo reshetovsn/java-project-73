@@ -166,3 +166,7 @@ checkstyleMain.exclude (
 		'**/hexlet/code/AppApplication**',
 		'**/hexlet/code/ServletInitializer**'
 )
+
+tasks.withType(Checkstyle).configureEach {
+	exclude '**/src/main/java/hexlet/code/AppApplication**'
+}
