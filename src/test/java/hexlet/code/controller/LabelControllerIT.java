@@ -137,8 +137,16 @@ public class LabelControllerIT {
                 .getResponse();
 
         final List<Label> labels = fromJson(response.getContentAsString(), new TypeReference<>() { });
+        final List<Label> expectedLabels = labelRepository.findAll();
 
         assertThat(labels).hasSize(1);
+
+        int i = 0;
+        for (var label : labels) {
+            assertThat(label.getId()).isEqualTo(expectedLabels.get(i).getId());
+            assertThat(label.getName()).isEqualTo(expectedLabels.get(i).getName());
+            i++;
+        }
     }
 
     @Test

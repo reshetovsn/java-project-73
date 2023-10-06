@@ -136,8 +136,16 @@ public class TaskStatusControllerIT {
                 .getResponse();
 
         final List<TaskStatus> taskStatuses = fromJson(response.getContentAsString(), new TypeReference<>() { });
+        final List<TaskStatus> expectedTaskStatuses =  taskStatusRepository.findAll();
 
         assertThat(taskStatuses).hasSize(1);
+
+        int i = 0;
+        for (var taskStatus : taskStatuses) {
+            assertThat(taskStatus.getId()).isEqualTo(expectedTaskStatuses.get(i).getId());
+            assertThat(taskStatus.getName()).isEqualTo(expectedTaskStatuses.get(i).getName());
+            i++;
+        }
     }
 
     @Test

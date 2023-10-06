@@ -61,7 +61,7 @@ public class UserControllerIT {
         assertThat(0).isEqualTo(userRepository.count());
 
         final MockHttpServletRequestBuilder request = post("/api/users")
-                .content(MAPPER.writeValueAsString(USER_DTO)) //to do литерал
+                .content(MAPPER.writeValueAsString(USER_DTO))
                 .contentType(APPLICATION_JSON);
 
         final MockHttpServletResponse response = mockMvc.perform(request)
@@ -125,8 +125,18 @@ public class UserControllerIT {
                 .getResponse();
 
         final List<User> users = fromJson(response.getContentAsString(), new TypeReference<>() { });
+        final List<User> expectedUsers =  userRepository.findAll();
 
         assertThat(users).hasSize(1);
+
+        int i = 0;
+        for (var user : users) {
+            assertThat(user.getId()).isEqualTo(expectedUsers.get(i).getId());
+            assertThat(user.getFirstName()).isEqualTo(expectedUsers.get(i).getFirstName());
+            assertThat(user.getLastName()).isEqualTo(expectedUsers.get(i).getLastName());
+            assertThat(user.getEmail()).isEqualTo(expectedUsers.get(i).getEmail());
+            i++;
+        }
     }
 
     @Test
