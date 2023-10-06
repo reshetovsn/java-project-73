@@ -1,6 +1,5 @@
 package hexlet.code.controller;
 
-import com.rollbar.notifier.Rollbar;
 import hexlet.code.dto.UserDto;
 import hexlet.code.model.User;
 import hexlet.code.service.UserService;
@@ -12,7 +11,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.List;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,8 +34,6 @@ public class UserController {
             @userRepository.findById(#id).get().getEmail() == authentication.getName()
         """;
     private final UserService userService;
-    @Autowired
-    Rollbar rollbar;
 
     @Operation(summary = "Create a new user")
     @ApiResponses(value = {
@@ -49,7 +45,6 @@ public class UserController {
     @PostMapping
     @ResponseStatus(CREATED)
     public User registerNew(@RequestBody @Valid final UserDto dto) {
-        rollbar.debug("Here is some debug message");
         return userService.createNewUser(dto);
     }
 
