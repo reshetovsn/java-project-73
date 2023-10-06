@@ -160,10 +160,8 @@ processResources.dependsOn assembleFrontend
 task stage(dependsOn: ['clean', 'installDist'])
 installDist.mustRunAfter clean
 
-checkstyleMain.source = "**/src/main/java"
+checkstyleMain.source = "**/project/code"
 
 checkstyleMain.exclude (
-		'**/hexlet/code/AppApplication**',
-		'**/hexlet/code/ServletInitializer**'
+		'**/src/main/java/hexlet/code/AppApplication**'
 )
-
