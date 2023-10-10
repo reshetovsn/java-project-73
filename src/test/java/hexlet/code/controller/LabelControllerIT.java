@@ -140,13 +140,7 @@ public class LabelControllerIT {
         final List<Label> expectedLabels = labelRepository.findAll();
 
         assertThat(labels).hasSize(1);
-
-        int i = 0;
-        for (var label : labels) {
-            assertThat(label.getId()).isEqualTo(expectedLabels.get(i).getId());
-            assertThat(label.getName()).isEqualTo(expectedLabels.get(i).getName());
-            i++;
-        }
+        assertThat(labels).containsAll(expectedLabels);
     }
 
     @Test

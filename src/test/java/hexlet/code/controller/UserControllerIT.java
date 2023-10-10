@@ -128,15 +128,7 @@ public class UserControllerIT {
         final List<User> expectedUsers =  userRepository.findAll();
 
         assertThat(users).hasSize(1);
-
-        int i = 0;
-        for (var user : users) {
-            assertThat(user.getId()).isEqualTo(expectedUsers.get(i).getId());
-            assertThat(user.getFirstName()).isEqualTo(expectedUsers.get(i).getFirstName());
-            assertThat(user.getLastName()).isEqualTo(expectedUsers.get(i).getLastName());
-            assertThat(user.getEmail()).isEqualTo(expectedUsers.get(i).getEmail());
-            i++;
-        }
+        assertThat(users).containsAll(expectedUsers);
     }
 
     @Test

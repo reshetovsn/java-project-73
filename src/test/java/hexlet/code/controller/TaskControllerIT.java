@@ -163,13 +163,7 @@ public class TaskControllerIT {
         final List<Task> expectedTasks =  taskRepository.findAll();
 
         assertThat(tasks).hasSize(1);
-
-        int i = 0;
-        for (var task : tasks) {
-            assertThat(task.getId()).isEqualTo(expectedTasks.get(i).getId());
-            assertThat(task.getName()).isEqualTo(expectedTasks.get(i).getName());
-            i++;
-        }
+        assertThat(tasks).containsAll(expectedTasks);
     }
 
     @Test
