@@ -117,7 +117,7 @@ public class TaskControllerIT {
 
         final Task expectedTask = taskRepository.findAll().get(0);
         final MockHttpServletResponse response = utils.perform(
-                        get("/api/tasks" + "/{id}", expectedTask.getId()),
+                        get("/api/tasks/{id}", expectedTask.getId()),
                         TEST_USERNAME
                 )
                 .andExpect(status().isOk())
@@ -141,7 +141,7 @@ public class TaskControllerIT {
         final Task expectedTask = taskRepository.findAll().get(0);
 
         utils.perform(
-                        get("/api/tasks" + "/{id}", expectedTask.getId() + 1),
+                        get("/api/tasks/{id}", expectedTask.getId() + 1),
                         TEST_USERNAME
                 )
                 .andExpect(status().isNotFound());
@@ -216,7 +216,7 @@ public class TaskControllerIT {
         final TaskDto taskDtoForUpdate = buildTaskDtoForUpdate(currentTask);
 
         final MockHttpServletRequestBuilder updateRequest = put(
-                "/api/tasks" + "/{id}", taskId
+                "/api/tasks/{id}", taskId
         )
                 .content(MAPPER.writeValueAsString(taskDtoForUpdate))
                 .contentType(APPLICATION_JSON);
@@ -240,7 +240,7 @@ public class TaskControllerIT {
         taskDtoForUpdate.setName("");
 
         final MockHttpServletRequestBuilder updateRequest = put(
-                "/api/tasks" + "/{id}", taskId
+                "/api/tasks/{id}", taskId
         )
                 .content(MAPPER.writeValueAsString(taskDtoForUpdate))
                 .contentType(APPLICATION_JSON);
@@ -254,7 +254,7 @@ public class TaskControllerIT {
 
         final Long taskId = taskRepository.findByName(TEST_TASK_NAME).orElseThrow().getId();
 
-        utils.perform(delete("/api/tasks" + "/{id}", taskId), TEST_USERNAME)
+        utils.perform(delete("/api/tasks/{id}", taskId), TEST_USERNAME)
                 .andExpect(status().isOk());
 
         assertThat(taskRepository.existsById(taskId)).isFalse();
@@ -266,7 +266,7 @@ public class TaskControllerIT {
 
         final Long taskId = taskRepository.findByName(TEST_TASK_NAME).orElseThrow().getId();
 
-        utils.perform(delete("/api/tasks" + "/{id}", taskId), TEST_USERNAME_2)
+        utils.perform(delete("/api/tasks/{id}", taskId), TEST_USERNAME_2)
                 .andExpect(status().isForbidden());
     }
 

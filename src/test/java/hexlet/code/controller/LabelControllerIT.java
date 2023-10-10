@@ -98,7 +98,7 @@ public class LabelControllerIT {
 
         final Label expectedLabel = labelRepository.findAll().get(0);
         final MockHttpServletResponse response = utils.perform(
-                        get("/api/labels" + "/{id}", expectedLabel.getId()),
+                        get("/api/labels/{id}", expectedLabel.getId()),
                         TEST_USERNAME
                 )
                 .andExpect(status().isOk())
@@ -118,7 +118,7 @@ public class LabelControllerIT {
         final Label expectedLabel = labelRepository.findAll().get(0);
 
         utils.perform(
-                        get("/api/labels" + "/{id}", expectedLabel.getId() + 1),
+                        get("/api/labels/{id}", expectedLabel.getId() + 1),
                         TEST_USERNAME
                 )
                 .andExpect(status().isNotFound());
@@ -157,7 +157,7 @@ public class LabelControllerIT {
         final LabelDto labelDtoForUpdate = new LabelDto(TEST_LABEL_NAME_2);
 
         final MockHttpServletRequestBuilder updateRequest = put(
-                "/api/labels" + "/{id}", labelId
+                "/api/labels/{id}", labelId
         )
                 .content(MAPPER.writeValueAsString(labelDtoForUpdate))
                 .contentType(APPLICATION_JSON);
@@ -179,7 +179,7 @@ public class LabelControllerIT {
         final LabelDto labelDtoForUpdate = new LabelDto("");
 
         final MockHttpServletRequestBuilder updateRequest = put(
-                "/api/labels" + "/{id}", labelId
+                "/api/labels/{id}", labelId
         )
                 .content(MAPPER.writeValueAsString(labelDtoForUpdate))
                 .contentType(APPLICATION_JSON);
@@ -193,7 +193,7 @@ public class LabelControllerIT {
 
         final Long labelId = labelRepository.findByName(TEST_LABEL_NAME).orElseThrow().getId();
 
-        utils.perform(delete("/api/labels" + "/{id}", labelId), TEST_USERNAME)
+        utils.perform(delete("/api/labels/{id}", labelId), TEST_USERNAME)
                 .andExpect(status().isOk());
 
         assertThat(labelRepository.existsById(labelId)).isFalse();
@@ -205,7 +205,7 @@ public class LabelControllerIT {
 
         final Long labelId = labelRepository.findByName(TEST_LABEL_NAME).orElseThrow().getId();
 
-        utils.perform(delete("/api/labels" + "/{id}", labelId))
+        utils.perform(delete("/api/labels/{id}", labelId))
                 .andExpect(status().isForbidden());
     }
 }

@@ -97,7 +97,7 @@ public class TaskStatusControllerIT {
 
         final TaskStatus expectedTaskStatus = taskStatusRepository.findAll().get(0);
         final MockHttpServletResponse response = utils.perform(
-                        get("/api/statuses" + "/{id}", expectedTaskStatus.getId()),
+                        get("/api/statuses/{id}", expectedTaskStatus.getId()),
                         TEST_USERNAME
                 )
                 .andExpect(status().isOk())
@@ -117,7 +117,7 @@ public class TaskStatusControllerIT {
         final TaskStatus expectedTaskStatus = taskStatusRepository.findAll().get(0);
 
         utils.perform(
-                        get("/api/statuses" + "/{id}", expectedTaskStatus.getId() + 1),
+                        get("/api/statuses/{id}", expectedTaskStatus.getId() + 1),
                         TEST_USERNAME
                 )
                 .andExpect(status().isNotFound());
@@ -157,7 +157,7 @@ public class TaskStatusControllerIT {
         final TaskStatusDto taskStatusDtoForUpdate = new TaskStatusDto("some other task");
 
         final MockHttpServletRequestBuilder updateRequest = put(
-                "/api/statuses" + "/{id}", taskStatusId
+                "/api/statuses/{id}", taskStatusId
         )
                 .content(MAPPER.writeValueAsString(taskStatusDtoForUpdate))
                 .contentType(APPLICATION_JSON);
@@ -180,7 +180,7 @@ public class TaskStatusControllerIT {
         final TaskStatusDto taskStatusDtoForUpdate = new TaskStatusDto("");
 
         final MockHttpServletRequestBuilder updateRequest = put(
-                "/api/statuses" + "/{id}", taskStatusId
+                "/api/statuses/{id}", taskStatusId
         )
                 .content(MAPPER.writeValueAsString(taskStatusDtoForUpdate))
                 .contentType(APPLICATION_JSON);
@@ -194,7 +194,7 @@ public class TaskStatusControllerIT {
 
         final Long taskStatusId = taskStatusRepository.findByName(TEST_TASK_STATUS_NAME).orElseThrow().getId();
 
-        utils.perform(delete("/api/statuses" + "/{id}", taskStatusId), TEST_USERNAME)
+        utils.perform(delete("/api/statuses/{id}", taskStatusId), TEST_USERNAME)
                 .andExpect(status().isOk());
 
         assertThat(taskStatusRepository.existsById(taskStatusId)).isFalse();
@@ -206,7 +206,7 @@ public class TaskStatusControllerIT {
 
         final Long taskStatusId = taskStatusRepository.findByName(TEST_TASK_STATUS_NAME).orElseThrow().getId();
 
-        utils.perform(delete("/api/statuses" + "/{id}", taskStatusId))
+        utils.perform(delete("/api/statuses/{id}", taskStatusId))
                 .andExpect(status().isForbidden());
     }
 }

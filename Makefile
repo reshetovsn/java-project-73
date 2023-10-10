@@ -2,34 +2,34 @@ setup:
 	gradle wrapper --gradle-version 8.2.1
 
 clean:
-	./gradlew clean
+	gradle clean
 
 build:
-	./gradlew clean build
+	gradle clean build
 
 start:
-	./gradlew bootRun --args='--spring.profiles.active=dev'
+	gradle bootRun --args='--spring.profiles.active=dev'
 
 install:
-	./gradlew install
+	gradle install
 
 start-prod:
-	./gradlew bootRun --args='--spring.profiles.active=prod'
+	gradle bootRun --args='--spring.profiles.active=prod'
 
 generate-migrations:
-	./gradlew generateMigrations
+	gradle generateMigrations
 
 lint:
-	./gradlew checkstyleMain checkstyleTest
+	gradle checkstyleMain checkstyleTest
 
 test:
-	./gradlew test
+	gradle test
 
 report:
-	./gradlew jacocoTestReport
+	gradle jacocoTestReport
 
 check-updates:
-	./gradlew dependencyUpdates
+	gradle dependencyUpdates
 
 image-build:
 	docker build -t hexletcomponents/app:latest .

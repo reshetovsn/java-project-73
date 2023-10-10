@@ -16,7 +16,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
-import java.util.Date;
+
+import java.time.Instant;
 import java.util.Set;
 
 import lombok.AllArgsConstructor;
@@ -61,5 +62,5 @@ public class Task {
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
+    private Instant createdAt;
 }
